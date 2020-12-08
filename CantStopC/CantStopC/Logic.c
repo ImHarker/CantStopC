@@ -38,7 +38,7 @@ void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *
 
 	c1 = dice1 + dice4;
 	c2 = dice2 + dice3;
-	printf("\nDado1: %d, Dado2: %d, Dado3: %d, Dado4: %d", dice1, dice2, dice3, dice4);//debug
+	printf("\nDice1: %d, Dice2: %d, Dice3: %d, Dice4: %d", dice1, dice2, dice3, dice4);//debug
 	printf("\n %i e %i OU %i e %i OU %i e %i \n", a1, a2, b1, b2, c1, c2); //debug
 	printf("%i\n", canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)); // debug
 	system("pause");

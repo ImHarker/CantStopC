@@ -28,8 +28,10 @@ void menu(void) {
 	gotoxy(rectX + 2, rectY + 10);
 	printf("2 - Load Game");
 
-	gotoxy(rectX + 2, rectY + 16);
+	gotoxy(rectX + 2, rectY + 15);
 	printf("3 - How to Play");
+	gotoxy(rectX + 2, rectY + 16);
+	printf("4 - GitHub Page");
 
 	gotoxy(rectX + 2,rectY + rectHEIGHT - 1);
 	printf("0 - Exit");
@@ -67,6 +69,11 @@ void menu(void) {
 		case '3':
 			system("cls");
 			how2();
+			break;
+
+		case '4':
+			system("start https://github.com/ImHarker/CantStopC");
+			menu();
 			break;
 
 		case '0':
