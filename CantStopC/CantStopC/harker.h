@@ -30,7 +30,7 @@ typedef struct BOARD {
 //Credits
 #define COPY_CHAR 169
 #define CREDITS "Vasco Teixeira - al74107"
-#define CREDITS1 "  ASDADADAD - al123123"
+#define CREDITS1 "  Gustavo Santos - al70800"
 #define CREDITS2 "  Universidade de Tras-os-Montes e Alto Douro"
 
 void menu(void);

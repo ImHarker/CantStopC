@@ -56,8 +56,8 @@ void drawBoard(void) {
 		printf("%d", 6 - j + 2);																//draw col number 2 to 7
 		gotoxy(COLS / 2 - 3 + 7 * (j - 1) + 3, 1 + 2 * (j - 1)+8);
 		printf("%d", 6 + j);																	//draw col number 7 to 11
-		showRectAt(COLS / 2 - 6 * j - (j - 1) + 3, 2 * (j - 1) + 8, 6, 26 - 4 * (j-1));
-		showRectAt(COLS / 2 + 6 * (j - 2) + (j - 1) + 3, 2 * (j - 1) + 8, 6, 26 - 4 * (j-1));
+		showRectAt(COLS / 2 - 6 * j - (j - 1) + 3, 2 * (j - 1) + 8, 6, 26 - 4 * (j-1));		//draw col 2 to 7
+		showRectAt(COLS / 2 + 6 * (j - 2) + (j - 1) + 3, 2 * (j - 1) + 8, 6, 26 - 4 * (j-1));	//draw col 7 to 11
 		printf("\n");
 
 	}																	//draw credits
