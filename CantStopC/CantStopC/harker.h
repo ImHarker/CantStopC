@@ -48,11 +48,14 @@ void init(board *cantStop, player *p, player *AI);
 void draw(player p, player AI);
 void drawBoard(void);
 void drawPlayerList(player p, player AI);
+void drawTempMarkers(int n, player* p);
 
-void logic(int gameOver, board *cantStop, player *p);
+void logic(int gameOver, board *cantStop, player *p, player *AI);
 //void checkCol();
 void genDice(int* dice1, int* dice2, int* dice3, int* dice4);
 void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *p);
 int canPlay(player *p, board *cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
+void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
+void movePlayer(int n, player *p);
 
 #endif

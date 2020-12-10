@@ -10,6 +10,6 @@ void game(void) {
 	init(&cantStop, &p, &AI);
 	while (!gameOver) {
 		draw(p,AI);
-		logic(gameOver, &cantStop, &p);
+		logic(gameOver, &cantStop, &p, &AI);
 	}
 }
