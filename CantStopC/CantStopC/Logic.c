@@ -4,10 +4,18 @@
 void logic(int gameOver, board *cantStop, player *p, player *AI) {
 	int dice1, dice2, dice3, dice4;
 	genDice(&dice1, &dice2, &dice3, &dice4);
-	//NJOGADAS CHECKER HERE!!!!!!!!!!!!!!!!! if (njogadas % 2== 0) if(p->nplayer == 1)
-	input(dice1, dice2, dice3, dice4, cantStop, p);
-	
+	if ((cantStop->nTurns % 2 == 0 && p->playerN == 1) || (cantStop->nTurns % 2 != 0 && p->playerN == 2)) {
+		input(dice1, dice2, dice3, dice4, cantStop, p);
+	}
+	else {
+		playAI(cantStop);
+	}
 
+}
+
+void playAI(board *cantStop) {
+	system("pause");
+	cantStop->nTurns++;
 }
 
 /*void checkCol() {
@@ -42,13 +50,12 @@ void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *
 	printf("%i\n", canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)); // debug
 	play(p, cantStop, a1, a2, b1, b2, c1, c2);
 
-	system("pause");
 }
 int canPlay(player *p,board *cantStop, int a1, int a2, int b1, int b2, int c1, int c2){
 	int i;
 
 	for (i = 0; i < 3; i++) {
-		if  (p->current[i] == 0										 ||
+		if  ((p->current[i] == 0 && (cantStop->isFull[a1-2] == false || cantStop->isFull[a2 - 2] == false || cantStop->isFull[b1 - 2] == false || cantStop->isFull[b2 - 2] == false || cantStop->isFull[c1 - 2] == false || cantStop->isFull[c2 - 2] == false))	||
 			(p->current[i] == a1 && cantStop->isFull[a1-2] == false) ||
 			(p->current[i] == a2 && cantStop->isFull[a2-2] == false) ||
 			(p->current[i] == b1 && cantStop->isFull[b1-2] == false) ||
@@ -60,8 +67,8 @@ int canPlay(player *p,board *cantStop, int a1, int a2, int b1, int b2, int c1, i
 	return false;
 }
 void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2) {
-	int i;
-	char combination = NULL;
+	char combination = '0';
+	char opt = '0';
 	if (canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)) {
 		if (   (p->current[0] == 0 
 			&& cantStop->isFull[a1 - 2] == false 
@@ -86,14 +93,17 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 			case 'a':
 				movePlayer(a1, p);
 				movePlayer(a2, p);
+				p->nSubTurns++;
 				break;
 			case 'b':
 				movePlayer(b1, p);
 				movePlayer(b2, p);
+				p->nSubTurns++;
 				break;
 			case 'c':
 				movePlayer(c1, p);
 				movePlayer(c2, p);
+				p->nSubTurns++;
 				break;
 			default:
 				play(p, cantStop, a1, a2, b1, b2, c1, c2);
@@ -224,6 +234,79 @@ void movePlayer(int n, player *p) {
 				break;
 			}
 			if (hasChanged == 1) break;
+		}
+	}
+}
+
+void setPerm(player* p) {
+	int i, n;
+	for (n = 2; n <= 12; n++) {
+		if (n <= 7) {									//n col < or = 7
+			for (i = 0; i <= 2 * n - 2; i++) {
+				switch (n) {
+				case 2:
+					if (p->col2[i] == 1) {				//if there is no marker
+						p->col2[i] = 2;					//place temp marker				//set flag to 1
+					}
+					break;
+				case 3:
+					if (p->col3[i] == 1) {
+						p->col3[i] = 2;
+					}
+					break;
+				case 4:
+					if (p->col4[i] == 1) {
+						p->col4[i] = 2;
+					}
+					break;
+				case 5:
+					if (p->col5[i] == 1) {
+						p->col5[i] = 2;
+					}
+					break;
+				case 6:
+					if (p->col6[i] == 1) {
+						p->col6[i] = 2;
+					}
+					break;
+				case 7:
+					if (p->col7[i] == 1) {
+						p->col7[i] = 2;
+					}
+					break;
+				}
+			}
+		}
+		else if (n > 7) {												//if n col > 7
+			for (i = 0; i <= 2 * (n - (n - 7) * 2) - 2; i++) {			//same as above^^
+				switch (n) {
+				case 8:
+					if (p->col8[i] == 1) {
+						p->col8[i] = 2;
+					}
+					break;
+				case 9:
+					if (p->col9[i] == 1) {
+						p->col9[i] = 2;
+					}
+					break;
+				case 10:
+					if (p->col10[i] == 1) {
+						p->col10[i] = 2;
+					}
+					break;
+				case 11:
+					if (p->col11[i] == 1) {
+						p->col11[i] = 2;
+					}
+					break;
+				case 12:
+					if (p->col12[i] == 1) {
+						p->col12[i] = 2;
+					}
+					break;
+				}
+			}
 		}
 	}
 }

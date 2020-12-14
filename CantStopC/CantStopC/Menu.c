@@ -82,7 +82,7 @@ void menu(void) {
 
 		default:
 			menu();
-			selector = NULL;
+			selector = 'Z';
 			break;
 	}
 }

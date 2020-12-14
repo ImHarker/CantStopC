@@ -6,6 +6,8 @@ void init(board *cantStop, player *p, player *AI) {
 	//init isFull[]
 	for (i = 0; i < 11; i++)
 		cantStop->isFull[i] = false;
+	//init nTurns
+	cantStop->nTurns = 0;
 
 	//INIT PLAYER
 
@@ -46,6 +48,11 @@ void init(board *cantStop, player *p, player *AI) {
 	//init playerName
 	strcpy(p->name, getPlayerName());
 
+	//init score
+	p->score = 0;
+
+	//init nSubTurns
+	p->nSubTurns = 0;
 	//INIT AI
 
 	//init col7[]
@@ -87,13 +94,42 @@ void init(board *cantStop, player *p, player *AI) {
 	else {
 		AI->playerN = 1;
 	}
+	//init name[]
+	strcpy(AI->name, "AI");
+
+	//init score
+	AI->score = 0;
+
+	//init nSubTurns
+	AI->nSubTurns = 0;
 }
 
 char* getPlayerName(void) {
-	char name[21];
+	char name[21] = "A Nameless Human?";
 	fseek(stdin, 0, SEEK_END); //clear stdin buffer
 	printf("Insert your name: ");
 	(void)scanf("%20[^\n]s", name);
 	fseek(stdin, 0, SEEK_END);
 	return name;
+}
+
+void askContinue(board* cantStop, player* p) {
+	char opt;
+	int i;
+	if ((cantStop->nTurns % 2 == 0 && p->playerN == 1) || (cantStop->nTurns % 2 != 0 && p->playerN == 2)) {
+		if (p->nSubTurns == 0) { 
+			p->nSubTurns++;
+			return; 
+		}
+		do {
+			printf("\nDo you want to continue playing?\nY or N: ");
+			(void)scanf(" %c", &opt);
+			opt = tolower(opt);
+			if (opt == 'n') {
+				cantStop->nTurns++;
+				p->nSubTurns = 0;
+				setPerm(p);
+			}
+		} while (opt != 'n' && opt != 'y');
+	}
 }

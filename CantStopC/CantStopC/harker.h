@@ -20,11 +20,14 @@ typedef struct PLAYER {
 	int col2[3], col3[5], col4[7], col5[9], col6[11], col7[13], col8[11], col9[9], col10[7], col11[5], col12[3];
 	int current[3];
 	int playerN;
+	int score;
+	int nSubTurns;
 }player;
 
 //Board struct
 typedef struct BOARD {
 	int isFull[11];
+	int nTurns;
 }board;
 
 //Credits
@@ -39,16 +42,19 @@ void how2(void);
 
 void game(void);
 
+void playAI(board *cantStop);
 
 char* getPlayerName(void);
 
 void init(board *cantStop, player *p, player *AI);
+void askContinue(board* cantStop, player* p);
 
 
 void draw(player p, player AI);
 void drawBoard(void);
 void drawPlayerList(player p, player AI);
 void drawTempMarkers(int n, player* p);
+void drawPermMarkers(int n, player* p);
 
 void logic(int gameOver, board *cantStop, player *p, player *AI);
 //void checkCol();
@@ -57,5 +63,6 @@ void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *
 int canPlay(player *p, board *cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
 void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
 void movePlayer(int n, player *p);
+void setPerm(player* p);
 
 #endif
