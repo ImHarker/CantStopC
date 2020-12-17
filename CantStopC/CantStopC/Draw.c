@@ -16,7 +16,7 @@ void draw(player p, player AI) {
 
 void drawTempMarkers(int n, player* p) {
 	int i;
-	int index = -5;											//init position with an value to use has a flag aswell
+	int index = -5;											//init position with an value to use as a flag aswell
 
 
 	if (n <= 7) {											//n col < or = 7
@@ -139,14 +139,14 @@ void drawPlayerList(player p, player AI) {
 		setlocale(LC_ALL, "C");
 		printf("%c %c", 254, 207);				//draw player marker (permanent and temp)
 		resetColor();
-		printf(" %c 0%c\n",26, 30);				//draw player current score (won cols)
+		printf(" %c %d%c\n",26,p.score, 30);				//draw player current score (won cols)
 		gotoxy(COLS / 2 - COLS / 3 + 3, 3);
 		printf("%s ", AI.name);					//draw AI name
 		setForeColor(MY_COLOR_DARK_RED);
 		setlocale(LC_ALL, "C");
 		printf("%c %c", 254, 207);				//draw AI marker (permanent and temp)
 		resetColor();
-		printf(" %c 0%c\n",26, 30);				//draw AI current score (won cols)
+		printf(" %c %d%c\n",26, AI.score, 30);				//draw AI current score (won cols)
 	}
 	else {										//Case: AI is the first playing
 		gotoxy(COLS / 2 - COLS / 3 + 3, 2);
@@ -155,27 +155,27 @@ void drawPlayerList(player p, player AI) {
 		setlocale(LC_ALL, "C");
 		printf("%c %c", 254, 207);				//draw AI marker (permanent and temp)
 		resetColor();
-		printf(" %c 0%c\n",26, 30);				//draw AI current score (won cols)
+		printf(" %c %d%c\n",26,AI.score, 30);				//draw AI current score (won cols)
 		gotoxy(COLS / 2 - COLS / 3 + 3, 3);
 		printf("%s ", p.name);					//draw player name
 		setForeColor(MY_COLOR_DARK_RED);
 		setlocale(LC_ALL, "C");
 		printf("%c %c", 254, 207);				//draw player marker (permanent and temp)
 		resetColor();
-		printf(" %c 0%c\n",26, 30);				//draw current score (won cols)
+		printf(" %c %d%c\n",26, p.score, 30);				//draw current score (won cols)
 	}
 }
 
 void drawPermMarkers(int n, player* p) {
 	int i;
-	int index = -5;											//init position with an value to use has a flag aswell
+	int index = -5;											//init position with an value to use as a flag aswell
 
 
 	if (n <= 7) {											//n col < or = 7
 		for (i = 1; i <= 2 * n - 2; i++) {
 			switch (n) {									//changes to col number
 			case 2:
-				if ((p->col2[i] == 0 && p->col2[i-1] == 2) || (p->col2[i] == 1 && p->col2[i - 1] == 2)) {						//if there is no marker in this position
+				if ((p->col2[i] == 0 && p->col2[i-1] == 2) || (p->col2[i] == 1 && p->col2[i - 1] == 2)) {						//if there is no marker in this position or a temp marker in the current turn
 					index = i - 1;							//set position to draw to i-1
 				}
 				else if (p->col2[2 * n - 2] == 2) {		//verify if the last position has a temporary marker

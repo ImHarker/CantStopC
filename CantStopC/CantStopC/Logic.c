@@ -9,6 +9,7 @@ void logic(int gameOver, board *cantStop, player *p, player *AI) {
 	}
 	else {
 		playAI(cantStop);
+	
 	}
 
 }
@@ -18,16 +19,86 @@ void playAI(board *cantStop) {
 	cantStop->nTurns++;
 }
 
-/*void checkCol() {
- //n is the number of the col
-	if (col[2*n - 2] && n <= 7) {
-		//col won
+void checkCols(board* cantStop, player* p) {
+	int i;
+	for (i = 2; i < 13; i++) {
+		if (i <= 7) {
+		switch (i) {
+		case 2:
+			if (p->col2[2 * i - 2] == 2 && cantStop->isFull[0] == false) {
+				p->score++;
+				cantStop->isFull[0] = true;
+			}
+			break;
+		case 3:
+			if (p->col3[2 * i - 2] == 2 && cantStop->isFull[1] == false) {
+				p->score++;
+				cantStop->isFull[1] = true;
+			}
+			break;
+		case 4:
+			if (p->col4[2 * i - 2] == 2 && cantStop->isFull[2] == false) {
+				p->score++;
+				cantStop->isFull[2] = true;
+			}
+			break;
+		case 5:
+			if (p->col5[2 * i - 2] == 2 && cantStop->isFull[3] == false) {
+				p->score++;
+				cantStop->isFull[3] = true;
+			}
+			break;
+		case 6:
+			if (p->col6[2 * i - 2] == 2 && cantStop->isFull[4] == false) {
+				p->score++;
+				cantStop->isFull[4] = true;
+			}
+			break;
+		case 7:
+			if (p->col7[2 * i - 2] == 2 && cantStop->isFull[5] == false) {
+				p->score++;
+				cantStop->isFull[5] = true;
+			}
+			break;
+		}
 	}
-	else if (col[2 * (n - (n - 7) * 2) - 2] && n > 7) {
-		//col won
-	}
-}*/	
+		if (i > 7) {
+			switch (i) {
+			case 8:
+				if (p->col8[2 * (i - (i - 7) * 2) - 2] == 2 && cantStop->isFull[6] == false) {
+					p->score++;
+					cantStop->isFull[6] = true;
+				}
+				break;
+			case 9:
+				if (p->col9[2 * (i - (i - 7) * 2) - 2] == 2 && cantStop->isFull[7] == false) {
+					p->score++;
+					cantStop->isFull[7] = true;
+				}
+				break;
+			case 10:
+				if (p->col10[2 * (i - (i - 7) * 2) - 2] == 2 && cantStop->isFull[8] == false) {
+					p->score++;
+					cantStop->isFull[8] = true;
+				}
+				break;
+			case 11:
+				if (p->col11[2 * (i - (i - 7) * 2) - 2] == 2 && cantStop->isFull[9] == false) {
+					p->score++;
+					cantStop->isFull[9] = true;
+				}
+				break;
+			case 12:
+				if (p->col12[2 * (i - (i - 7) * 2) - 2] == 2 && cantStop->isFull[10] == false) {
+					p->score++;
+					cantStop->isFull[10] = true;
+				}
+				break;
+			}
+		}
 
+	}
+}
 void genDice(int *dice1, int* dice2, int* dice3, int* dice4) {
 	*dice1 = rand() % 6 + 1;
 	*dice2 = rand() % 6 + 1;
@@ -45,9 +116,11 @@ void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *
 
 	c1 = dice1 + dice4;
 	c2 = dice2 + dice3;
-	printf("\nDice1: %d, Dice2: %d, Dice3: %d, Dice4: %d", dice1, dice2, dice3, dice4);//debug
-	printf("\n %i e %i OU %i e %i OU %i e %i \n", a1, a2, b1, b2, c1, c2); //debug
-	printf("%i\n", canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)); // debug
+	sideMenuClear(0);
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+	printf("Dice1: %d, Dice2: %d, Dice3: %d, Dice4: %d", dice1, dice2, dice3, dice4);//debug
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
+	printf("Can play: %i", canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)); // debug
 	play(p, cantStop, a1, a2, b1, b2, c1, c2);
 
 }
@@ -70,22 +143,24 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 	char combination = '0';
 	char opt = '0';
 	if (canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)) {
-		if (   (p->current[0] == 0 
-			&& cantStop->isFull[a1 - 2] == false 
-			&& cantStop->isFull[a2 - 2] == false 
-			&& cantStop->isFull[b1 - 2] == false
-			&& cantStop->isFull[b2 - 2] == false
-			&& cantStop->isFull[c1 - 2] == false
-			&& cantStop->isFull[c2 - 2] == false)
-			|| (p->current[1] == 0
+		if ( p->current[1] == 0
 				&& cantStop->isFull[a1 - 2] == false
 				&& cantStop->isFull[a2 - 2] == false
 				&& cantStop->isFull[b1 - 2] == false
 				&& cantStop->isFull[b2 - 2] == false
 				&& cantStop->isFull[c1 - 2] == false
-				&& cantStop->isFull[c2 - 2] == false)) {										//No temp markers or 1 marker and no cols full
-			printf("\nA: %i and %i\nB: %i and %i\nC: %i and %i", a1, a2, b1, b2, c1, c2);
-			printf("\nChoose one combination A, B or C to play\n");
+				&& cantStop->isFull[c2 - 2] == false) {										//No temp markers or 1 marker and no cols full
+			sideMenuClear(1);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 4);
+			printf("A: %i and %i", a1, a2);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 5);
+			printf("B: %i and %i",b1, b2);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 6);
+			printf("C: %i and %i",c1, c2);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 8);
+			printf("Choose one combination A, B or C to play");
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 9);
+			fseek(stdin, 0, SEEK_END);
 			(void)scanf(" %c", &combination);
 			combination = tolower(combination);
 			switch (combination)
@@ -109,45 +184,6 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 				play(p, cantStop, a1, a2, b1, b2, c1, c2);
 				break;
 			}
-		}else if((p->current[0] == 0
-			   || cantStop->isFull[a1 - 2] == true
-		   	   || cantStop->isFull[a2 - 2] == true
-			   || cantStop->isFull[b1 - 2] == true
-			   || cantStop->isFull[b2 - 2] == true
-			   || cantStop->isFull[c1 - 2] == true
-			   || cantStop->isFull[c2 - 2] == true)
-			   || (p->current[1] == 0
-			   || cantStop->isFull[a1 - 2] == true
-			   || cantStop->isFull[a2 - 2] == true
-		       || cantStop->isFull[b1 - 2] == true
-			   || cantStop->isFull[b2 - 2] == true
-			   || cantStop->isFull[c1 - 2] == true
-			   || cantStop->isFull[c2 - 2] == true)){		//No  temp markers or 1 marker any cols full
-
-
-			if (cantStop->isFull[a1 - 2] == true && cantStop->isFull[a2 - 2] == true) {							//A IMPOSSIBLE
-				printf("\nA: %i and %i (NOT POSSIBLE)\nB: %i and %i\nC: %i and %i", a1, a2, b1, b2, c1, c2);
-			}
-			else if (cantStop->isFull[b1 - 2] == true && cantStop->isFull[b2 - 2] == true) {					//B IMPOSSIBLE
-				printf("\nA: %i and %i\nB: %i and %i (NOT POSSIBLE)\nC: %i and %i", a1, a2, b1, b2, c1, c2);
-			}
-			else if (cantStop->isFull[c1 - 2] == true && cantStop->isFull[c2 - 2] == true) {					//C IMPOSSIBLE
-				printf("\nA: %i and %i\nB: %i and %i\nC: %i and %i (NOT POSSIBLE)", a1, a2, b1, b2, c1, c2);
-			}
-			else if (cantStop->isFull[a1 - 2] == true && cantStop->isFull[a2 - 2] == true &&
-					 cantStop->isFull[b1 - 2] == true && cantStop->isFull[b2 - 2] == true) {					// A & B IMPOSSIBLE
-				printf("\nA: %i and %i (NOT POSSIBLE)\nB: %i and %i (NOT POSSIBLE)\nC: %i and %i", a1, a2, b1, b2, c1, c2);
-			}
-			else if (cantStop->isFull[a1 - 2] == true && cantStop->isFull[a2 - 2] == true &&
-					 cantStop->isFull[c1 - 2] == true && cantStop->isFull[c2 - 2] == true) {					//A & C IMPOSSIBLE
-				printf("\nA: %i and %i (NOT POSSIBLE)\nB: %i and %i\nC: %i and %i (NOT POSSIBLE)", a1, a2, b1, b2, c1, c2);
-			}
-			else if (cantStop->isFull[b1 - 2] == true && cantStop->isFull[b2 - 2] == true &&
-					 cantStop->isFull[c1 - 2] == true && cantStop->isFull[c2 - 2] == true) {					//B & C IMPOSSIBLE
-				printf("\nA: %i and %i\nB: %i and %i (NOT POSSIBLE)\nC: %i and %i (NOT POSSIBLE)", a1, a2, b1, b2, c1, c2);
-			}
-		
-		
 		}
 	}else {
 		printf("\nNo possible moves! You lost all the progress made in this round!\n");							//A & B & C IMPOSSIBLE	
@@ -245,8 +281,8 @@ void setPerm(player* p) {
 			for (i = 0; i <= 2 * n - 2; i++) {
 				switch (n) {
 				case 2:
-					if (p->col2[i] == 1) {				//if there is no marker
-						p->col2[i] = 2;					//place temp marker				//set flag to 1
+					if (p->col2[i] == 1) {				//if there is a temp marker
+						p->col2[i] = 2;					//place perm marker		
 					}
 					break;
 				case 3:

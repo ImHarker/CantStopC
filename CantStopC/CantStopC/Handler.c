@@ -122,7 +122,12 @@ void askContinue(board* cantStop, player* p) {
 			return; 
 		}
 		do {
-			printf("\nDo you want to continue playing?\nY or N: ");
+			sideMenuClear(0);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("Do you want to continue playing?");
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 1);
+			printf("Y or N: ");
+			fseek(stdin, 0, SEEK_END);
 			(void)scanf(" %c", &opt);
 			opt = tolower(opt);
 			if (opt == 'n') {
@@ -131,5 +136,13 @@ void askContinue(board* cantStop, player* p) {
 				setPerm(p);
 			}
 		} while (opt != 'n' && opt != 'y');
+	}
+}
+
+void sideMenuClear(int n) {
+	int i;
+	for (i = n; i < 15; i++) {
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + i);
+		printf("                                                    ");
 	}
 }

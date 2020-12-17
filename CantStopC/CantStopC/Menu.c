@@ -52,6 +52,7 @@ void menu(void) {
 	//menu logic
 	gotoxy(rectX + 2, rectY + rectHEIGHT + 2);
 		printf("Choose an option: ");
+		fseek(stdin, 0, SEEK_END);
 		(void)scanf(" %c", &selector);
 
 	switch (selector){

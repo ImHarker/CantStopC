@@ -32,8 +32,8 @@ typedef struct BOARD {
 
 //Credits
 #define COPY_CHAR 169
-#define CREDITS "Vasco Teixeira - al74107"
-#define CREDITS1 "  Gustavo Santos - al70800"
+#define CREDITS "Gustavo Santos - al70800"
+#define CREDITS1 "  Vasco Teixeira - al74107"
 #define CREDITS2 "  Universidade de Tras-os-Montes e Alto Douro"
 
 void menu(void);
@@ -55,12 +55,13 @@ void drawBoard(void);
 void drawPlayerList(player p, player AI);
 void drawTempMarkers(int n, player* p);
 void drawPermMarkers(int n, player* p);
+void sideMenuClear(int n);
 
 void logic(int gameOver, board *cantStop, player *p, player *AI);
-//void checkCol();
+void checkCols(board *cantStop, player *p);
 void genDice(int* dice1, int* dice2, int* dice3, int* dice4);
 void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *p);
-int canPlay(player *p, board *cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
+int  canPlay(player *p, board *cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
 void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
 void movePlayer(int n, player *p);
 void setPerm(player* p);

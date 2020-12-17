@@ -13,6 +13,9 @@ void game(void) {
 		logic(gameOver, &cantStop, &p, &AI);
 		draw(p,AI);
 		askContinue(&cantStop, &p);
+		checkCols(&cantStop, &AI); //updates score and isfull array
+		checkCols(&cantStop, &p);
 		draw(p, AI);
+
 	}
 }
