@@ -113,32 +113,6 @@ char* getPlayerName(void) {
 	return name;
 }
 
-void askContinue(board* cantStop, player* p) {
-	char opt;
-	int i;
-	if ((cantStop->nTurns % 2 == 0 && p->playerN == 1) || (cantStop->nTurns % 2 != 0 && p->playerN == 2)) {
-		if (p->nSubTurns == 0) { 
-			p->nSubTurns++;
-			return; 
-		}
-		do {
-			sideMenuClear(0);
-			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
-			printf("Do you want to continue playing?");
-			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 1);
-			printf("Y or N: ");
-			fseek(stdin, 0, SEEK_END);
-			(void)scanf(" %c", &opt);
-			opt = tolower(opt);
-			if (opt == 'n') {
-				cantStop->nTurns++;
-				p->nSubTurns = 0;
-				setPerm(p);
-			}
-		} while (opt != 'n' && opt != 'y');
-	}
-}
-
 void sideMenuClear(int n) {
 	int i;
 	for (i = n; i < 15; i++) {

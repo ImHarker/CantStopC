@@ -117,9 +117,11 @@ void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *
 	c1 = dice1 + dice4;
 	c2 = dice2 + dice3;
 	sideMenuClear(0);
-	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
-	printf("Dice1: %d, Dice2: %d, Dice3: %d, Dice4: %d", dice1, dice2, dice3, dice4);//debug
-	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
+	drawDices(dice1, dice2, dice3, dice4);
+	//printf("Dice1: %d, Dice2: %d, Dice3: %d, Dice4: %d", dice1, dice2, dice3, dice4);//debug
+	gotoxy(20, ROWS / 2 + 1);
+	printf("DEBUG:");
+	gotoxy(20, ROWS / 2 + 2);
 	printf("Can play: %i", canPlay(p, cantStop, a1, a2, b1, b2, c1, c2)); // debug
 	play(p, cantStop, a1, a2, b1, b2, c1, c2);
 
@@ -150,7 +152,9 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 				&& cantStop->isFull[b2 - 2] == false
 				&& cantStop->isFull[c1 - 2] == false
 				&& cantStop->isFull[c2 - 2] == false) {										//No temp markers or 1 marker and no cols full
-			sideMenuClear(1);
+			sideMenuClear(4);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
+			printf("Combinations:");
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 4);
 			printf("A: %i and %i", a1, a2);
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 5);
@@ -163,6 +167,7 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 			fseek(stdin, 0, SEEK_END);
 			(void)scanf(" %c", &combination);
 			combination = tolower(combination);
+
 			switch (combination)
 			{
 			case 'a':
@@ -344,5 +349,31 @@ void setPerm(player* p) {
 				}
 			}
 		}
+	}
+}
+
+void askContinue(board* cantStop, player* p) {
+	char opt;
+	int i;
+	if ((cantStop->nTurns % 2 == 0 && p->playerN == 1) || (cantStop->nTurns % 2 != 0 && p->playerN == 2)) {
+		if (p->nSubTurns == 0) {
+			p->nSubTurns++;
+			return;
+		}
+		do {
+			sideMenuClear(0);
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("Do you want to continue playing?");
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 1);
+			printf("Y or N: ");
+			fseek(stdin, 0, SEEK_END);
+			(void)scanf(" %c", &opt);
+			opt = tolower(opt);
+			if (opt == 'n') {
+				cantStop->nTurns++;
+				p->nSubTurns = 0;
+				setPerm(p);
+			}
+		} while (opt != 'n' && opt != 'y');
 	}
 }

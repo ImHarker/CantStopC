@@ -323,3 +323,16 @@ void drawBoard(void) {
 	gotoxy(COLS - strlen(CREDITS2) - 1, ROWS);
 	printf(" %s", CREDITS2);
 }
+
+void drawDices(int dice1, int dice2, int dice3, int dice4) {
+	int i;
+	int w = 4, h = 2;
+	int dx = 4;
+	int temp[4] = {dice1, dice2, dice3, dice4};
+	for (i = 0; i < 4; i++) {
+		showRectAt((COLS / 2 - COLS / 3 + 4) + (w + 1) * i + dx*i, ROWS / 2 - 2, w, h);
+		gotoxy((COLS / 2 - COLS / 3 + 4) + 2 + (w + 1) * i + dx * i, ROWS / 2 - 2 + 1);
+		printf("%d", temp[i]);
+		
+	}
+}
