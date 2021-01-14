@@ -144,9 +144,11 @@
     <ClCompile Include="Handler.c" />
     <ClCompile Include="How2.c" />
     <ClCompile Include="lab.c" />
+    <ClCompile Include="Load.c" />
     <ClCompile Include="Logic.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="Menu.c" />
+    <ClCompile Include="Save.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="harker.h" />

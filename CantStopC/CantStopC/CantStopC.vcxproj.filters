@@ -39,6 +39,12 @@
     <ClCompile Include="Menu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Save.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Load.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="harker.h">

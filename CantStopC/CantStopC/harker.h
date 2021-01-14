@@ -17,11 +17,11 @@
 //Player struct
 typedef struct PLAYER {
 	char name[21];
-	int col2[3], col3[5], col4[7], col5[9], col6[11], col7[13], col8[11], col9[9], col10[7], col11[5], col12[3];
-	int current[3];
+	int nSubTurns;
 	int playerN;
 	int score;
-	int nSubTurns;
+	int current[3];
+	int col2[3], col3[5], col4[7], col5[9], col6[11], col7[13], col8[11], col9[9], col10[7], col11[5], col12[3];
 }player;
 
 //Board struct
@@ -62,9 +62,13 @@ void logic(int gameOver, board *cantStop, player *p, player *AI);
 void checkCols(board *cantStop, player *p);
 void genDice(int* dice1, int* dice2, int* dice3, int* dice4);
 void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *p);
-int  canPlay(player *p, board *cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
+int  canPlay(int *matrix, int a1, int a2, int b1, int b2, int c1, int c2);
 void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
 void movePlayer(int n, player *p);
 void setPerm(player* p);
+void genComboMatrix(int* matrix, player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
+
+int savePlayer(FILE* fptr, player p);
+int loadPlayer(FILE* fptr, player* p);
 
 #endif

@@ -7,7 +7,12 @@ void game(void) {
 	board cantStop;
 	player p;
 	player AI;
+	FILE* fptr;
 	init(&cantStop, &p, &AI);
+	//fptr = fopen("player.txt", "r");
+	//saveGame(fptr, p);
+	//loadPlayer(fptr, &p);
+	//fclose(fptr);
 	draw(p, AI);
 	while (!gameOver) {
 		logic(gameOver, &cantStop, &p, &AI);
