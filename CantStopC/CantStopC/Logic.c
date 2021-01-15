@@ -117,7 +117,8 @@ void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *
 	c1 = dice1 + dice4;
 	c2 = dice2 + dice3;
 	sideMenuClear(0);
-	drawDices(dice1, dice2, dice3, dice4);
+	drawDice(dice1, dice2, dice3, dice4);
+	drawCombo(a1, a2, b1, b2, c1, c2);
 	//printf("Dice1: %d, Dice2: %d, Dice3: %d, Dice4: %d", dice1, dice2, dice3, dice4);//debug
 	play(p, cantStop, a1, a2, b1, b2, c1, c2);
 
@@ -133,7 +134,7 @@ int canPlay(int *matrix, int a1, int a2, int b1, int b2, int c1, int c2) {
 	return false;
 }
 void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2) {
-	char combination = '0';
+	char move = '0';
 	int comboMatrix[11];
 
 	genComboMatrix(comboMatrix, p, cantStop, a1, a2, b1, b2, c1, c2);
@@ -150,7 +151,7 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 
 			sideMenuClear(4);
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
-			printf("Combinations:");
+			printf("Possible Moves:");
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 4);
 			printf("A: %i and %i", a1, a2);
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 5);
@@ -158,14 +159,14 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 6);
 			printf("C: %i and %i",c1, c2);
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 8);
-			printf("Choose one combination A, B or C to play");
+			printf("Choose a move A, B or C to play");
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 9);
 			fseek(stdin, 0, SEEK_END);
-			(void)scanf(" %c", &combination);
+			(void)scanf(" %c", &move);
 			fseek(stdin, 0, SEEK_END);
-			combination = tolower(combination);
+			move = tolower(move);
 
-			switch (combination)
+			switch (move)
 			{
 			case 'a':
 				movePlayer(a1, p);

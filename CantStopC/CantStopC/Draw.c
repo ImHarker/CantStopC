@@ -132,15 +132,18 @@ void drawTempMarkers(int n, player* p) {
 }
 
 void drawPlayerList(player p, player AI) {
+	(strlen(p.name) > strlen(AI.name) ? showRectAt(COLS / 2 - COLS / 3 + 4, 3, strlen(p.name) + 10, 5) : showRectAt(COLS / 2 - COLS / 3 + 4, 3, strlen(AI.name) + 10, 5));
+	gotoxy(COLS / 2 - COLS / 3 + 5, 4);
+	printf("SCOREBOARD");
 	if (p.playerN == 1) {						//Case: Human is the first playing
-		gotoxy(COLS / 2 - COLS / 3 + 3, 2);
+		gotoxy(COLS / 2 - COLS / 3 + 5, 6);
 		printf("%s ", p.name);					//draw player name
 		setForeColor(MY_COLOR_DARK_BLUE);
 		setlocale(LC_ALL, "C");
 		printf("%c %c", 254, 207);				//draw player marker (permanent and temp)
 		resetColor();
 		printf(" %c %d%c\n",26,p.score, 30);				//draw player current score (won cols)
-		gotoxy(COLS / 2 - COLS / 3 + 3, 3);
+		gotoxy(COLS / 2 - COLS / 3 + 5, 7);
 		printf("%s ", AI.name);					//draw AI name
 		setForeColor(MY_COLOR_DARK_RED);
 		setlocale(LC_ALL, "C");
@@ -149,14 +152,14 @@ void drawPlayerList(player p, player AI) {
 		printf(" %c %d%c\n",26, AI.score, 30);				//draw AI current score (won cols)
 	}
 	else {										//Case: AI is the first playing
-		gotoxy(COLS / 2 - COLS / 3 + 3, 2);
+		gotoxy(COLS / 2 - COLS / 3 + 5, 6);
 		printf("%s ", AI.name);					//draw AI name
 		setForeColor(MY_COLOR_DARK_BLUE);
 		setlocale(LC_ALL, "C");
 		printf("%c %c", 254, 207);				//draw AI marker (permanent and temp)
 		resetColor();
 		printf(" %c %d%c\n",26,AI.score, 30);				//draw AI current score (won cols)
-		gotoxy(COLS / 2 - COLS / 3 + 3, 3);
+		gotoxy(COLS / 2 - COLS / 3 + 5, 7);
 		printf("%s ", p.name);					//draw player name
 		setForeColor(MY_COLOR_DARK_RED);
 		setlocale(LC_ALL, "C");
@@ -324,15 +327,46 @@ void drawBoard(void) {
 	printf(" %s", CREDITS2);
 }
 
-void drawDices(int dice1, int dice2, int dice3, int dice4) {
-	int i;
+void drawCombo(int a1, int a2, int b1, int b2, int c1, int c2) {
+	int i, j;
 	int w = 4, h = 2;
-	int dx = 4;
-	int temp[4] = {dice1, dice2, dice3, dice4};
-	for (i = 0; i < 4; i++) {
-		showRectAt((COLS / 2 - COLS / 3 + 4) + (w + 1) * i + dx*i, ROWS / 2 - 2, w, h);
-		gotoxy((COLS / 2 - COLS / 3 + 4) + 2 + (w + 1) * i + dx * i, ROWS / 2 - 2 + 1);
-		printf("%d", temp[i]);
-		
+	int dy = 0;
+	int count = -1;
+	int temp[6] = {a1, a2, b1, b2, c1, c2};
+
+	showRectAt((COLS / 2 - COLS / 3 + 4) + (w + 1) * 2 - strlen("COMBINATIONS") / 2 -4, ROWS / 3 - 3 + 1, strlen("COMBINATIONS")+ 1, 6*h -1);
+	gotoxy((COLS / 2 - COLS / 3 + 4) + (w+1)*2 -strlen("COMBINATIONS")/2 + 1 -4, ROWS / 3 - 1);
+	printf("COMBINATIONS");
+
+	for (i = 1; i <= 3; i++) {
+		for (j = 1; j <= 2; j++) {
+			showRectAt((COLS / 2 - COLS / 3 + 4) + (w + 1)*j + 2*j -2 -4, ROWS / 3 + dy, w, h);
+			gotoxy((COLS / 2 - COLS / 3 + 4) + 2 + (w + 1)*j + 2*j -2 -4, ROWS / 3 + 1 + dy);
+			count++;
+			printf("%d", temp[count]);
+		}
+		dy += h + 1;
+	}
+}
+
+void drawDice(int dice1, int dice2, int dice3, int dice4) {
+	int i, j;
+	int w = 4, h = 2;
+	int dy = 0;
+	int count = -1;
+	int temp[4] = { dice1, dice2, dice3, dice4 };
+
+	showRectAt((COLS / 2 - COLS / 3 + 4) + (w + 1) * 2 - strlen("DICES ROLLED") / 2 -4, ROWS / 5 - 3, strlen("DICES ROLLED") + 1, 4 * h);
+	gotoxy((COLS / 2 - COLS / 3 + 4) + (w + 1) * 2 - strlen("DICES ROLLED") / 2 + 1 -4, ROWS / 5 - 2);
+	printf("DICES ROLLED");
+
+	for (i = 1; i <= 2; i++) {
+		for (j = 1; j <= 2; j++) {
+			showRectAt((COLS / 2 - COLS / 3 + 4) + (w + 1) * j + 2 * j - 2 -4, ROWS / 5 + dy - 1, w, h);
+			gotoxy((COLS / 2 - COLS / 3 + 4) + 2 + (w + 1) * j + 2 * j - 2 -4, ROWS / 5 + dy);
+			count++;
+			printf("%d", temp[count]);
+		}
+		dy += h + 1;
 	}
 }

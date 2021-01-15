@@ -56,7 +56,8 @@ void drawPlayerList(player p, player AI);
 void drawTempMarkers(int n, player* p);
 void drawPermMarkers(int n, player* p);
 void sideMenuClear(int n);
-void drawDices(int dice1, int dice2, int dice3, int dice4);
+void drawDice(int dice1, int dice2, int dice3, int dice4);
+void drawCombo(int a1, int a2, int b1, int b2, int c1, int c2);
 
 void logic(int gameOver, board *cantStop, player *p, player *AI);
 void checkCols(board *cantStop, player *p);
