@@ -370,3 +370,22 @@ void drawDice(int dice1, int dice2, int dice3, int dice4) {
 		dy += h + 1;
 	}
 }
+void drawWinner(player p, player p2) {
+	system("cls");
+	showRectAt(COLS / 2 - COLS / 3, 0, 2 * COLS / 3, ROWS / 2 + ROWS / 3);
+	gotoxy(COLS / 2 - strlen("Player  won the game with an advantage of x column(s)")/2 - strlen(p.name)/2, ROWS / 2);
+	printf("Player %s won the game with an advantage of %d column(s)", p.name, p.score - p2.score);
+	gotoxy(COLS / 2 - strlen("Thanks for playing") / 2, ROWS / 2 + 2);
+	printf("Thanks for playing");
+
+	//credits
+	gotoxy(COLS - strlen(CREDITS2) - 1, ROWS - 2);
+	printf(" %c %s", COPY_CHAR, CREDITS);
+	gotoxy(COLS - strlen(CREDITS2) - 1, ROWS - 1);
+	printf(" %s", CREDITS1);
+	gotoxy(COLS - strlen(CREDITS2) - 1, ROWS);
+	printf(" %s", CREDITS2);
+
+	gotoxy(COLS / 2 - strlen("Press any key to continue . . .") / 2, ROWS / 2 + 4);
+	system("pause");
+}

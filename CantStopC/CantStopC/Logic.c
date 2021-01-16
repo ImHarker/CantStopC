@@ -1,7 +1,7 @@
 #include "harker.h"
 
 
-void logic(int gameOver, board *cantStop, player *p, player *AI) {
+void logic(board *cantStop, player *p, player *AI) {
 	int dice1, dice2, dice3, dice4;
 	genDice(&dice1, &dice2, &dice3, &dice4);
 	if ((cantStop->nTurns % 2 == 0 && p->playerN == 1) || (cantStop->nTurns % 2 != 0 && p->playerN == 2)) {
@@ -139,12 +139,12 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 
 	genComboMatrix(comboMatrix, p, cantStop, a1, a2, b1, b2, c1, c2);
 
-
+	/* //DEBUG
 	gotoxy(20, ROWS / 2 + 1);
 	printf("DEBUG:");
 	gotoxy(20, ROWS / 2 + 2);
-	printf("Can play: %i", canPlay(comboMatrix, a1, a2, b1, b2, c1, c2)); // debug
-
+	printf("Can play: %i", canPlay(comboMatrix, a1, a2, b1, b2, c1, c2));
+	*/
 
 
 	if (canPlay(comboMatrix, a1, a2, b1, b2, c1, c2)) {
@@ -656,5 +656,16 @@ void extremeMove(player* p, int a, int b) {
 		movePlayer(b, p);
 		addToCurrent(p, b);
 		break;
+	}
+}
+
+void gameOverChecker(int* gameOver, player p, player AI) {
+	if (p.score == 3) {
+		*gameOver = 1;
+		drawWinner(p, AI);
+	}
+	else if (AI.score == 3) {
+		*gameOver = 1;
+		drawWinner(AI, p);
 	}
 }

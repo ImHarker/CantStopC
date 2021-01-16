@@ -58,8 +58,9 @@ void drawPermMarkers(int n, player* p);
 void sideMenuClear(int n);
 void drawDice(int dice1, int dice2, int dice3, int dice4);
 void drawCombo(int a1, int a2, int b1, int b2, int c1, int c2);
+void drawWinner(player p, player p2);
 
-void logic(int gameOver, board *cantStop, player *p, player *AI);
+void logic(board *cantStop, player *p, player *AI);
 void checkCols(board *cantStop, player *p);
 void genDice(int* dice1, int* dice2, int* dice3, int* dice4);
 void input(int dice1, int dice2, int dice3, int dice4, board *cantStop, player *p);
@@ -71,6 +72,8 @@ void genComboMatrix(int* matrix, player* p, board* cantStop, int a1, int a2, int
 void addToCurrent(player* p, int move);
 void resetProgress(player* p);
 void extremeMove(player* p, int a, int b);
+
+void gameOverChecker(int* gameOver, player p, player AI);
 
 int savePlayer(FILE* fptr, player p);
 int loadPlayer(FILE* fptr, player* p);
