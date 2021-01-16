@@ -152,14 +152,36 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 			sideMenuClear(4);
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
 			printf("Possible Moves:");
+
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 4);
-			printf("A: %i and %i", a1, a2);
+			printf("A:");
+			if (comboMatrix[a1 - 2] == 0 && comboMatrix[a2 - 2] == 0) printf(" No possible moves");
+			if (comboMatrix[a1 - 2]) printf(" %d", a1);
+			if (comboMatrix[a1 - 2] && comboMatrix[a2 - 2]) {
+				printf(" and %d", a2);
+			}else if (comboMatrix[a2 - 2]) printf(" %d", a2);
+
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 5);
-			printf("B: %i and %i",b1, b2);
+			printf("B:");
+			if (comboMatrix[b1 - 2] == 0 && comboMatrix[b2 - 2] == 0) printf(" No possible moves");
+			if (comboMatrix[b1 - 2]) printf(" %d", b1);
+			if (comboMatrix[b1 - 2] && comboMatrix[b2 - 2]) {
+				printf(" and %d", b2);
+			}
+			else if (comboMatrix[b2 - 2]) printf(" %d", b2);
+
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 6);
-			printf("C: %i and %i",c1, c2);
+			printf("C:");
+			if (comboMatrix[c1 - 2] == 0 && comboMatrix[c2 - 2] == 0) printf(" No possible moves");
+			if (comboMatrix[c1 - 2]) printf(" %d", c1);
+			if (comboMatrix[c1 - 2] && comboMatrix[c2 - 2]) {
+				printf(" and %d", c2);
+			}
+			else if (comboMatrix[c2 - 2]) printf(" %d", c2);
+
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 8);
 			printf("Choose a move A, B or C to play");
+
 			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 9);
 			fseek(stdin, 0, SEEK_END);
 			(void)scanf(" %c", &move);
@@ -169,18 +191,60 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 			switch (move)
 			{
 			case 'a':
-				movePlayer(a1, p);
-				movePlayer(a2, p);
+				if (comboMatrix[a1 - 2] == 0 && comboMatrix[a2 - 2] == 0) {
+					play(p, cantStop, a1, a2, b1, b2, c1, c2);
+					break;
+				}
+				if (comboMatrix[a1 - 2] && comboMatrix[a2 - 2] && p->current[0] != a1 && p->current[1] != a1 && p->current[2] != a1 && p->current[0] != a2 && p->current[1] != a2 && p->current[2] != a2 && p->current[0] != 0 && p->current[1] != 0) {
+					extremeMove(p, a1, a2);
+					return;
+				}
+				if (comboMatrix[a1 - 2]) {
+					movePlayer(a1, p);
+					addToCurrent(p, a1);
+				}
+				if (comboMatrix[a2 - 2]) {
+					movePlayer(a2, p);
+					addToCurrent(p, a2);
+				}
 				p->nSubTurns++;
 				break;
 			case 'b':
-				movePlayer(b1, p);
-				movePlayer(b2, p);
+				if (comboMatrix[b1 - 2] == 0 && comboMatrix[b2 - 2] == 0) {
+					play(p, cantStop, a1, a2, b1, b2, c1, c2);
+					break;
+				}
+				if (comboMatrix[b1 - 2] && comboMatrix[b2 - 2] && p->current[0] != b1 && p->current[1] != b1 && p->current[2] != b1 && p->current[0] != b2 && p->current[1] != b2 && p->current[2] != b2 && p->current[0] != 0 && p->current[1] != 0) {
+					extremeMove(p, b1, b2);
+					return;
+				}
+				if (comboMatrix[b1 - 2]) {
+					movePlayer(b1, p);
+					addToCurrent(p, b1);
+				}
+				if (comboMatrix[b2 - 2]) {
+					movePlayer(b2, p);
+					addToCurrent(p, b2);
+				}
 				p->nSubTurns++;
 				break;
 			case 'c':
-				movePlayer(c1, p);
-				movePlayer(c2, p);
+				if (comboMatrix[c1 - 2] == 0 && comboMatrix[c2 - 2] == 0) {
+					play(p, cantStop, a1, a2, b1, b2, c1, c2);
+					break;
+				}
+				if (comboMatrix[c1 - 2] && comboMatrix[c2 - 2] && p->current[0] != c1 && p->current[1] != c1 && p->current[2] != c1 && p->current[0] != c2 && p->current[1] != c2 && p->current[2] != c2 && p->current[0] != 0 && p->current[1] != 0) {
+					extremeMove(p, c1, c2);
+					return;
+				}
+				if (comboMatrix[c1 - 2]) {
+					movePlayer(c1, p);
+					addToCurrent(p, c1);
+				}
+				if (comboMatrix[c2 - 2]) {
+					movePlayer(c2, p);
+					addToCurrent(p, c2);
+				}
 				p->nSubTurns++;
 				break;
 			default:
@@ -190,6 +254,8 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 		}else {
 		printf("\nNo possible moves! You lost all the progress made in this round!\n");							//A & B & C IMPOSSIBLE	
 		system("pause");
+		resetProgress(p);
+		cantStop->nTurns++;
 	}
 }
 void movePlayer(int n, player *p) {
@@ -371,6 +437,10 @@ void askContinue(board* cantStop, player* p) {
 				cantStop->nTurns++;
 				p->nSubTurns = 0;
 				setPerm(p);
+				//reset current
+				for (i = 0; i < 3; i++) {
+					p->current[i] = 0;
+				}
 			}
 		} while (opt != 'n' && opt != 'y');
 	}
@@ -387,81 +457,204 @@ void genComboMatrix(int* matrix, player* p, board* cantStop, int a1, int a2, int
 		switch (diceCombo[i]) {
 		case 2:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col2[2] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col2[2] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 3:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col3[4] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col3[4] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 4:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col4[6] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col4[6] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 5:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col5[8] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col5[8] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 6:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col6[10] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col6[10] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 7:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col7[12] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col7[12] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 8:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col8[10] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col8[10] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 9:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col9[8] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col9[8] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 10:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col10[6] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col10[6] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 11:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col11[4] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col11[4] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		case 12:
 			for (j = 0; j < 3; j++) {
-				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && cantStop->isFull[diceCombo[i] - 2] == 0 && p->col12[2] == 0) {
+				if ((p->current[j] == 0 || p->current[j] == diceCombo[i]) && (cantStop->isFull[diceCombo[i] - 2] == 0 && p->col12[2] == 0)) {
 					matrix[diceCombo[i] - 2] = 1;
 				}
 			}
 			break;
 		}
+	}
+}
+
+void addToCurrent(player *p, int move) {
+	int i;
+	for (i = 0; i < 3; i++) {
+		if (p->current[i] == move) {
+			return;
+		}
+		else {
+			if (p->current[i] == 0) {
+				p->current[i] = move;
+				return;
+			}
+		}
+	}
+}
+void resetProgress(player *p) {
+	int i;
+			//col2
+			for (i = 0; i < 3; i++) {
+				if (p->col2[i] == 1) {
+					p->col2[i] = 0;
+				}
+			}
+			//col3
+			for (i = 0; i < 5; i++) {
+				if (p->col3[i] == 1) {
+					p->col3[i] = 0;
+				}
+			}
+			//col4
+			for (i = 0; i < 7; i++) {
+				if (p->col4[i] == 1) {
+					p->col4[i] = 0;
+				}
+			}
+			//col5
+			for (i = 0; i < 9; i++) {
+				if (p->col5[i] == 1) {
+					p->col5[i] = 0;
+				}
+			}
+			//col6
+			for (i = 0; i < 11; i++) {
+				if (p->col6[i] == 1) {
+					p->col6[i] = 0;
+				}
+			}
+			//col7
+			for (i = 0; i < 13; i++) {
+				if (p->col7[i] == 1) {
+					p->col7[i] = 0;
+				}
+			}
+			//col8
+			for (i = 0; i < 11; i++) {
+				if (p->col8[i] == 1) {
+					p->col8[i] = 0;
+				}
+			}
+			//col9
+			for (i = 0; i < 9; i++) {
+				if (p->col9[i] == 1) {
+					p->col9[i] = 0;
+				}
+			}
+			//col10
+			for (i = 0; i < 7; i++) {
+				if (p->col10[i] == 1) {
+					p->col10[i] = 0;
+				}
+			}
+			//col11
+			for (i = 0; i < 5; i++) {
+				if (p->col11[i] == 1) {
+					p->col11[i] = 0;
+				}
+			}
+			//col12
+			for (i = 0; i < 3; i++) {
+				if (p->col12[i] == 1) {
+					p->col12[i] = 0;
+				}
+			}
+
+			//current
+			for (i = 0; i < 3; i++) {
+					p->current[i] = 0;
+			}
+
+			p->nSubTurns = 0;
+}
+
+void extremeMove(player* p, int a, int b) {
+	char move = '0';
+	sideMenuClear(4);
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
+	printf("Possible Moves:");
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 4);
+	printf("A: %d", a);
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 5);
+	printf("B: %d", b);
+
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 8);
+	printf("Choose a move A or B to play");
+
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 9);
+	fseek(stdin, 0, SEEK_END);
+	(void)scanf(" %c", &move);
+	fseek(stdin, 0, SEEK_END);
+	move = tolower(move);
+
+	switch (move)
+	{
+	case 'a':
+		movePlayer(a, p);
+		addToCurrent(p, a);
+		break;
+	case 'b':
+		movePlayer(b, p);
+		addToCurrent(p, b);
+		break;
 	}
 }

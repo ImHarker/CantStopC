@@ -18,6 +18,7 @@ int main(void) {
 
     printf("columns: %d\n", columns);
     printf("rows: %d\n", rows);
+    system("pause");
     */
     
 	menu();

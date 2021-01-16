@@ -68,6 +68,9 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 void movePlayer(int n, player *p);
 void setPerm(player* p);
 void genComboMatrix(int* matrix, player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, int c2);
+void addToCurrent(player* p, int move);
+void resetProgress(player* p);
+void extremeMove(player* p, int a, int b);
 
 int savePlayer(FILE* fptr, player p);
 int loadPlayer(FILE* fptr, player* p);
