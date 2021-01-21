@@ -75,6 +75,7 @@ void extremeMove(player* p, int a, int b);
 
 void gameOverChecker(int* gameOver, player p, player AI);
 
+void saveGame(player p, board cantStop);
 int savePlayer(FILE* fptr, player p);
 int loadPlayer(FILE* fptr, player* p);
 

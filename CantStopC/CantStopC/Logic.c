@@ -195,7 +195,7 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 					play(p, cantStop, a1, a2, b1, b2, c1, c2);
 					break;
 				}
-				if (comboMatrix[a1 - 2] && comboMatrix[a2 - 2] && p->current[0] != a1 && p->current[1] != a1 && p->current[2] != a1 && p->current[0] != a2 && p->current[1] != a2 && p->current[2] != a2 && p->current[0] != 0 && p->current[1] != 0) {
+				if (comboMatrix[a1 - 2] && comboMatrix[a2 - 2] && p->current[0] != a1 && p->current[1] != a1 && p->current[2] != a1 && p->current[0] != a2 && p->current[1] != a2 && p->current[2] != a2 && p->current[0] != 0 && p->current[1] != 0 && a1 != a2) {
 					extremeMove(p, a1, a2);
 					return;
 				}
@@ -214,7 +214,7 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 					play(p, cantStop, a1, a2, b1, b2, c1, c2);
 					break;
 				}
-				if (comboMatrix[b1 - 2] && comboMatrix[b2 - 2] && p->current[0] != b1 && p->current[1] != b1 && p->current[2] != b1 && p->current[0] != b2 && p->current[1] != b2 && p->current[2] != b2 && p->current[0] != 0 && p->current[1] != 0) {
+				if (comboMatrix[b1 - 2] && comboMatrix[b2 - 2] && p->current[0] != b1 && p->current[1] != b1 && p->current[2] != b1 && p->current[0] != b2 && p->current[1] != b2 && p->current[2] != b2 && p->current[0] != 0 && p->current[1] != 0 && b1 != b2) {
 					extremeMove(p, b1, b2);
 					return;
 				}
@@ -233,7 +233,7 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 					play(p, cantStop, a1, a2, b1, b2, c1, c2);
 					break;
 				}
-				if (comboMatrix[c1 - 2] && comboMatrix[c2 - 2] && p->current[0] != c1 && p->current[1] != c1 && p->current[2] != c1 && p->current[0] != c2 && p->current[1] != c2 && p->current[2] != c2 && p->current[0] != 0 && p->current[1] != 0) {
+				if (comboMatrix[c1 - 2] && comboMatrix[c2 - 2] && p->current[0] != c1 && p->current[1] != c1 && p->current[2] != c1 && p->current[0] != c2 && p->current[1] != c2 && p->current[2] != c2 && p->current[0] != 0 && p->current[1] != 0 && c1!= c2) {
 					extremeMove(p, c1, c2);
 					return;
 				}
@@ -656,15 +656,19 @@ void extremeMove(player* p, int a, int b) {
 		movePlayer(b, p);
 		addToCurrent(p, b);
 		break;
+	default:
+		extremeMove(p, a, b);
+		break;
 	}
+	
 }
 
 void gameOverChecker(int* gameOver, player p, player AI) {
-	if (p.score == 3) {
+	if (p.score >= 3) {
 		*gameOver = 1;
 		drawWinner(p, AI);
 	}
-	else if (AI.score == 3) {
+	else if (AI.score >= 3) {
 		*gameOver = 1;
 		drawWinner(AI, p);
 	}

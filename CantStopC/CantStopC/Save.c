@@ -1,11 +1,12 @@
 #include "harker.h"
 
 
-int saveGame(FILE *fptr, player p) {
+void saveGame(player p, board cantStop) {
+	FILE* fptr;
+	fptr = fopen("gamesave.txt", "w");
 	savePlayer(fptr, p);
-	//saveBoard();
-	//saveVars();
-	return 1;
+	//saveBoard(fptr, cantStop);
+	//saveVars(fptr);
 }
 
 int savePlayer(FILE *fptr, player p) {

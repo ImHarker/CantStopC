@@ -371,10 +371,11 @@ void drawDice(int dice1, int dice2, int dice3, int dice4) {
 	}
 }
 void drawWinner(player p, player p2) {
+	system("pause");
 	system("cls");
 	showRectAt(COLS / 2 - COLS / 3, 0, 2 * COLS / 3, ROWS / 2 + ROWS / 3);
-	gotoxy(COLS / 2 - strlen("Player  won the game with an advantage of x column(s)")/2 - strlen(p.name)/2, ROWS / 2);
-	printf("Player %s won the game with an advantage of %d column(s)", p.name, p.score - p2.score);
+	gotoxy(COLS / 2 - strlen("Player '' won the game with an advantage of x column(s)")/2 - strlen(p.name)/2, ROWS / 2);
+	printf("Player '%s' won the game with an advantage of %d column(s)", p.name, p.score - p2.score);
 	gotoxy(COLS / 2 - strlen("Thanks for playing") / 2, ROWS / 2 + 2);
 	printf("Thanks for playing");
 
