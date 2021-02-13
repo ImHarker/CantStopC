@@ -1,4 +1,4 @@
-# Welcome to Can't Stop C Repo (WIP)
+# Welcome to Can't Stop C Repo
 
 # What is Can't Stop
 
