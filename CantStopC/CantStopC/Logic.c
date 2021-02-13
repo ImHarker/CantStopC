@@ -8,15 +8,214 @@ void logic(board *cantStop, player *p, player *AI) {
 		input(dice1, dice2, dice3, dice4, cantStop, p);
 	}
 	else {
-		playAI(cantStop);
+		playAI(cantStop, AI, &dice1, &dice2, &dice3, &dice4);
 	
 	}
 
 }
 
-void playAI(board *cantStop) {
+void playAI(board* cantStop, player* AI, int* dice1, int* dice2, int* dice3, int* dice4) {
+	int comboMatrix[11];
+	int bestMove[2] = { 0 , 0 };
+	int currentMove[2] = { 0 , 0 };
+	int bestRating = -2147483647;
+	int currentRating = 0;
+	int a1, a2, b1, b2, c1, c2;
+	int i;
+	a1 = *dice1 + *dice2;
+	a2 = *dice3 + *dice4;
+
+	b1 = *dice1 + *dice3;
+	b2 = *dice2 + *dice4;
+
+	c1 = *dice1 + *dice4;
+	c2 = *dice2 + *dice3;
+
+	genComboMatrix(comboMatrix, AI, cantStop, a1, a2, b1, b2, c1, c2);
+	sideMenuClear(0);
+	drawDice(*dice1, *dice2, *dice3, *dice4);
+	drawCombo(a1, a2, b1, b2, c1, c2);
+	//No markers available
+	if (AI->current[0] != 0 && AI->current[1] != 0 && AI->current[2] != 0) {
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+		printf("AI is skipping the turn");
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
+		system("pause");
+		for (i = 0; i < 3; i++) {
+			AI->current[i] = 0;
+		}
+		AI->nSubTurns = 0;
+		setPerm(AI);
+		cantStop->nTurns++;
+		return;
+	}
+
+	//Lost
+	if (!canPlay(comboMatrix, a1, a2, b1, b2, c1, c2)) {
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+		printf("No possible moves! The AI lost all the progress made in this round!");
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
+		system("pause");
+		resetProgress(AI);
+		cantStop->nTurns++;
+		return;
+	}
+
+	//base
+		calculateRating(AI, &currentRating, currentMove, a1, a2);
+		if (currentRating > bestRating) {
+			bestRating = currentRating;
+			for (i = 0; i < 2; i++)
+				bestMove[i] = currentMove[i];
+		}
+		calculateRating(AI, &currentRating, currentMove, b1, b2);
+		if (currentRating > bestRating) {
+			bestRating = currentRating;
+			for (i = 0; i < 2; i++)
+				bestMove[i] = currentMove[i];
+		}
+		calculateRating(AI, &currentRating, currentMove, c1, c2);
+		if (currentRating > bestRating) {
+			bestRating = currentRating;
+			for (i = 0; i < 2; i++)
+				bestMove[i] = currentMove[i];
+		}
+
+	//Only one
+	if (a1 == a2) {
+			if (comboMatrix[a1-2] == 1) {
+				calculateRating(AI, &currentRating, currentMove, a1, a2);
+				if (currentRating > bestRating) {
+					bestRating = currentRating + 50;
+					for (i = 0; i < 2; i++)
+						bestMove[i] = currentMove[i];
+				}
+		}
+	}
+	if (b1 == b2) {
+		if (comboMatrix[b1 - 2] == 1) {
+			calculateRating(AI, &currentRating, currentMove, b1, b2);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 50;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+		
+	}
+	if (c1 == c2) {
+		if (comboMatrix[c1 - 2] == 1) {
+			calculateRating(AI, &currentRating, currentMove, c1, c2);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 50;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+		
+	}
+	//Leave One Marker available
+	if (comboMatrix[a1 - 2] == 1) {
+		if (comboMatrix[a2 - 2] == 1) {
+			if ((a1 == AI->current[0] || a1 == AI->current[1]) && (a2 == AI->current[0] || a2 == AI->current[1])) {
+				calculateRating(AI, &currentRating, currentMove, a1, a2);
+				if (currentRating > bestRating) {
+					bestRating = currentRating + 30;
+					for (i = 0; i < 2; i++)
+						bestMove[i] = currentMove[i];
+				}
+		}
+		}else if (a1 == AI->current[0] || a1 == AI->current[1]) {
+			calculateRating(AI, &currentRating, currentMove, a1, -1);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 30;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+		
+	}
+
+	if (comboMatrix[b1 - 2] == 1) {
+		if (comboMatrix[b2 - 2] == 1) {
+			if ((b1 == AI->current[0] || b1 == AI->current[1]) && (b2 == AI->current[0] || b2 == AI->current[1])) {
+				calculateRating(AI, &currentRating, currentMove, b1, b2);
+				if (currentRating > bestRating) {
+					bestRating = currentRating + 30;
+					for (i = 0; i < 2; i++)
+						bestMove[i] = currentMove[i];
+				}
+			}
+		}
+		else if (b1 == AI->current[0] || b1 == AI->current[1]) {
+			calculateRating(AI, &currentRating, currentMove, b1, -1);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 30;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+		
+	}
+
+	if (comboMatrix[c1 - 2] == 1) {
+		if (comboMatrix[c2 - 2] == 1) {
+			if ((c1 == AI->current[0] || c1 == AI->current[1]) && (c2 == AI->current[0] || c2 == AI->current[1])) {
+				calculateRating(AI, &currentRating, currentMove, c1, c2);
+				if (currentRating > bestRating) {
+					bestRating = currentRating + 30;
+					for (i = 0; i < 2; i++)
+						bestMove[i] = currentMove[i];
+				}
+			}
+		}
+		else if (c1 == AI->current[0] || c1 == AI->current[1]) {
+			calculateRating(AI, &currentRating, currentMove, a1, -1);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 30;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+		
+	}
+
+	if (comboMatrix[a2 - 2] == 1 && comboMatrix[a1 - 2] == 0) {
+		if (a2 == AI->current[0] || a2 == AI->current[1]) {
+			calculateRating(AI, &currentRating, currentMove, a2, -1);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 30;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+	}
+
+	if (comboMatrix[b2 - 2] == 1 && comboMatrix[b1 - 2] == 0) {
+		if (b2 == AI->current[0] || b2 == AI->current[1]) {
+			calculateRating(AI, &currentRating, currentMove, b2, -1);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 30;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+	}
+
+	if (comboMatrix[c2 - 2] == 1 && comboMatrix[c1 - 2] == 0) {
+		if (c2 == AI->current[0] || c2 == AI->current[1]) {
+			calculateRating(AI, &currentRating, currentMove, c2, -1);
+			if (currentRating > bestRating) {
+				bestRating = currentRating + 30;
+				for (i = 0; i < 2; i++)
+					bestMove[i] = currentMove[i];
+			}
+		}
+	}
+
+	makeMoveAI(AI, cantStop, bestMove);
+	gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
 	system("pause");
-	cantStop->nTurns++;
 }
 
 void checkCols(board* cantStop, player* p) {
@@ -252,7 +451,9 @@ void play(player* p, board* cantStop, int a1, int a2, int b1, int b2, int c1, in
 				break;
 			}
 		}else {
-		printf("\nNo possible moves! You lost all the progress made in this round!\n");							//A & B & C IMPOSSIBLE	
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+		printf("No possible moves! You lost all the progress made in this round!");	
+		gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2 + 2);
 		system("pause");
 		resetProgress(p);
 		cantStop->nTurns++;
@@ -671,5 +872,145 @@ void gameOverChecker(int* gameOver, player p, player AI) {
 	else if (AI.score >= 3) {
 		*gameOver = 1;
 		drawWinner(AI, p);
+	}
+}
+
+void calculateRating(player* AI, int* currentRating, int* currentMove, int col1, int col2) {
+	int priority[11] = { 2,4,6,8,10,11,9,7,5,3,1 };
+	int colSizes[11] = { 3, 5, 7, 9, 11, 13, 11, 9, 7, 5, 3 };
+	int toTop[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	int i, j;
+	for (i = 2; i < 13; i++) {
+		for (j = 0; j < colSizes[i-2]; j++) {
+			switch (i)
+			{
+			case 2:
+				if (AI->col2[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 3:
+				if (AI->col3[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 4:
+				if (AI->col4[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 5:
+				if (AI->col5[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 6:
+				if (AI->col6[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 7:
+				if (AI->col7[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 8:
+				if (AI->col8[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 9:
+				if (AI->col9[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 10:
+				if (AI->col10[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 11:
+				if (AI->col11[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			case 12:
+				if (AI->col12[j] == 0) {
+					toTop[i - 2] = colSizes[i - 2] - j;
+				}
+			}
+		}
+	}
+	if (col2 != -1) {
+		*currentRating = priority[col1 - 2] + priority[col2 - 2] - toTop[col1 -2] * 10 - toTop[col2 - 2] * 10;
+	}else *currentRating = priority[col1 - 2] - toTop[col1 - 2] * 10;
+	currentMove[0] = col1;
+	currentMove[1] = col2;
+
+}
+void makeMoveAI(player *AI, board *cantStop, int* bestMove) {
+	int a, b;
+	a = bestMove[0];
+	b = bestMove[1];
+
+	if (AI->current[2] == 0 && AI->current[1] != 0  && AI->current[0] != 0) {
+		if (b != -1 && cantStop->isFull[a - 2] != 1 && cantStop->isFull[b - 2] != 1) {
+			if ((a == AI->current[0] || a == AI->current[1]) || (b == AI->current[0] || b == AI->current[1]) || (a == b)) {
+				movePlayer(a, AI);
+				addToCurrent(AI, a);
+				movePlayer(b, AI);
+				addToCurrent(AI, b);
+				AI->nSubTurns++;
+				gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+				printf("AI is playing at column %d and %d", a, b);
+				return;
+			}
+		}
+		if (b != AI->current[0] && b != AI->current[1] && b != AI->current[2] && cantStop->isFull[a-2] != 1) {
+			movePlayer(a, AI);
+			addToCurrent(AI, a);
+			AI->nSubTurns++;
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("AI is playing at column %d", a);
+			return;
+		}
+		else if (a != AI->current[0] && a != AI->current[1] && a != AI->current[2] && cantStop->isFull[b - 2] != 1) {
+			movePlayer(b, AI);
+			addToCurrent(AI, b);
+			AI->nSubTurns++;
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("AI is playing at column %d", b);
+			return;
+		}
+		else {
+			if (b != -1 && cantStop->isFull[a - 2] != 1 && cantStop->isFull[b - 2] != 1) {
+				movePlayer(a, AI);
+				addToCurrent(AI, a);
+				movePlayer(b, AI);
+				addToCurrent(AI, b);
+				AI->nSubTurns++;
+				gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+				printf("AI is playing at column %d and %d", a, b);
+				return;
+			}
+		}
+	}
+	else {
+		if (b != -1 && cantStop->isFull[a - 2] != 1 && cantStop->isFull[b - 2] != 1) {
+			movePlayer(a, AI);
+			addToCurrent(AI, a);
+			movePlayer(b, AI);
+			addToCurrent(AI, b);
+			AI->nSubTurns++;
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("AI is playing at column %d and %d", a, b);
+			return;
+		}
+		else if (cantStop->isFull[a - 2] != 1) {
+			movePlayer(a, AI);
+			addToCurrent(AI, a);
+			AI->nSubTurns++;
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("AI is playing at column %d", a);
+			return;
+		}
+		else if (cantStop->isFull[b - 2] != 1 && b != -1) {
+			movePlayer(b, AI);
+			addToCurrent(AI, b);
+			AI->nSubTurns++;
+			gotoxy(COLS / 2 - COLS / 3 + 4, ROWS / 2);
+			printf("AI is playing at column %d", b);
+			return;
+		}
 	}
 }

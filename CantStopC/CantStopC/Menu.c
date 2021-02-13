@@ -26,7 +26,7 @@ void menu(void) {
 	gotoxy(rectX + 2, rectY + 9);
 	printf("1 - Play");
 	gotoxy(rectX + 2, rectY + 10);
-	printf("2 - Load Game");
+	//printf("2 - Load Game");
 
 	gotoxy(rectX + 2, rectY + 15);
 	printf("3 - How to Play");

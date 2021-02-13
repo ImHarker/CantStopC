@@ -42,7 +42,7 @@ void how2(void);
 
 void game(void);
 
-void playAI(board *cantStop);
+void playAI(board *cantStop, player *AI, int* dice1, int* dice2, int* dice3, int* dice4);
 
 char* getPlayerName(void);
 
@@ -72,6 +72,8 @@ void genComboMatrix(int* matrix, player* p, board* cantStop, int a1, int a2, int
 void addToCurrent(player* p, int move);
 void resetProgress(player* p);
 void extremeMove(player* p, int a, int b);
+void calculateRating(player* AI, int* currentRating, int* currentMove, int col1, int col2);
+void makeMoveAI(player* AI, board* cantStop, int* bestMove);
 
 void gameOverChecker(int* gameOver, player p, player AI);
 
