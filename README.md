@@ -8,6 +8,7 @@
 We did this game as a project for our unit course.
 
 ## How to play
+You can download the game [here](https://github.com/ImHarker/CantStopC/releases).
 You can view the game rules [here](https://en.wikipedia.org/wiki/Can%27t_Stop_%28board_game%29#Rules) or at the game menu.
 # Authors
 
